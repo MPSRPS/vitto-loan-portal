@@ -136,6 +136,65 @@ function ApplicationRow({ app, onStatusChange, updatingId }) {
   );
 }
 
+function ApplicationCard({ app, onStatusChange, updatingId }) {
+  const busy = updatingId === app.id;
+  return (
+    <div className="app-card">
+      <div className="app-card__top">
+        <div>
+          <div className="app-card__name">{app.name}</div>
+          <div className="app-card__mobile">{app.mobile}</div>
+        </div>
+        <StatusBadge status={app.status} />
+      </div>
+      <div className="app-card__meta">
+        <div className="app-card__row">
+          <span className="app-card__label">Amount</span>
+          <span className="app-card__value app-card__amount">{fmt(app.amount)}</span>
+        </div>
+        <div className="app-card__row">
+          <span className="app-card__label">Purpose</span>
+          <span className="app-card__value">{app.purpose}</span>
+        </div>
+        <div className="app-card__row">
+          <span className="app-card__label">Language</span>
+          <LanguageBadge language={app.language} />
+        </div>
+        <div className="app-card__row">
+          <span className="app-card__label">Date</span>
+          <span className="app-card__value">{fmtDate(app.created_at)}</span>
+        </div>
+      </div>
+      <div className="app-card__actions">
+        {app.status !== 'approved' && (
+          <button
+            className="btn btn--sm btn--approve"
+            id={`mob-approve-${app.id}`}
+            disabled={busy}
+            onClick={() => onStatusChange(app.id, 'approved')}
+            style={{ flex: 1 }}
+          >
+            {busy ? '…' : 'Approve'}
+          </button>
+        )}
+        {app.status !== 'rejected' && (
+          <button
+            className="btn btn--sm btn--reject"
+            id={`mob-reject-${app.id}`}
+            disabled={busy}
+            onClick={() => onStatusChange(app.id, 'rejected')}
+            style={{ flex: 1 }}
+          >
+            {busy ? '…' : 'Reject'}
+          </button>
+        )}
+        {app.status === 'approved' && app.status !== 'rejected' && null}
+        {app.status !== 'pending' && app.status !== 'approved' && null}
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [applications, setApplications] = useState([]);
   const [summary,      setSummary]      = useState(null);
@@ -236,7 +295,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div role="region" aria-label="Applications table" aria-live="polite">
+        <div role="region" aria-label="Applications list" aria-live="polite">
           {loading ? (
             <div className="state-center">
               <div className="spinner" role="status" aria-label="Loading" />
@@ -244,7 +303,7 @@ export default function DashboardPage() {
             </div>
           ) : applications.length === 0 ? (
             <div className="state-center">
-              <div className="state-center__icon" aria-hidden="true">📭</div>
+              <div className="state-center__icon" aria-hidden="true">📢</div>
               <p className="state-center__title">No applications found</p>
               <p className="state-center__sub">
                 {search || statusFilter
@@ -253,29 +312,46 @@ export default function DashboardPage() {
               </p>
             </div>
           ) : (
-            <table className="table" aria-label="Loan applications">
-              <thead>
-                <tr>
-                  <th scope="col">Applicant</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Purpose</th>
-                  <th scope="col">Language</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Date Applied</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+            <>
+              {/* Desktop / tablet — table */}
+              <div className="table-wrap">
+                <table className="table" aria-label="Loan applications">
+                  <thead>
+                    <tr>
+                      <th scope="col">Applicant</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Purpose</th>
+                      <th scope="col">Language</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Date Applied</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map((app) => (
+                      <ApplicationRow
+                        key={app.id}
+                        app={app}
+                        onStatusChange={handleStatusChange}
+                        updatingId={updatingId}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile — card list */}
+              <div className="app-cards">
                 {applications.map((app) => (
-                  <ApplicationRow
+                  <ApplicationCard
                     key={app.id}
                     app={app}
                     onStatusChange={handleStatusChange}
                     updatingId={updatingId}
                   />
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </>
           )}
         </div>
       </div>

@@ -708,6 +708,84 @@ input, select { font-family: var(--font); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
+/* ── Table wrap (desktop) / App cards (mobile) ───────────────────── */
+.table-wrap { display: block; }
+.app-cards  { display: none; }
+
+/* App card component */
+.app-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: box-shadow var(--ease);
+}
+.app-card:active { box-shadow: var(--shadow-md); }
+
+.app-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.app-card__name {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.app-card__mobile {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 0.75rem;
+}
+.app-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.app-card__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.app-card__value {
+  font-size: 0.8125rem;
+  color: var(--text-mid);
+  text-align: right;
+}
+.app-card__amount {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-card__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.app-card__actions .btn {
+  flex: 1;
+  justify-content: center;
+}
+
 /* ── Mobile Nav ──────────────────────────────────────────────────── */
 .mobile-nav {
   display: none;
@@ -831,6 +909,15 @@ input, select { font-family: var(--font); }
   /* Page header smaller */
   .page-header h1 { font-size: 1.375rem; }
   .page-header { margin-bottom: 1.25rem; }
+
+  /* Show cards, hide table on mobile */
+  .table-wrap { display: none; }
+  .app-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
 
   /* Show mobile nav */
   .mobile-nav { display: flex; }
