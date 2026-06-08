@@ -102,6 +102,20 @@ export default function AppShell({ children }) {
 
         <div className="page">{children}</div>
       </div>
+
+      {/* ─── Mobile Bottom Nav ─────────────────────────── */}
+      <nav className="mobile-nav" aria-label="Mobile Navigation">
+        {NAV.map(({ to, label, icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) => `mobile-nav__link${isActive ? ' active' : ''}`}
+          >
+            {icon}
+            <span>{label}</span>
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }

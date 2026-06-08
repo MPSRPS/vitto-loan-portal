@@ -708,16 +708,61 @@ input, select { font-family: var(--font); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
+/* ── Mobile Nav ──────────────────────────────────────────────────── */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+  z-index: 200;
+  box-shadow: 0 -4px 20px rgba(15,23,42,0.08);
+  /* safe area for iOS notch */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.mobile-nav__link {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.625rem 0 0.5rem;
+  gap: 3px;
+  color: var(--text-faint);
+  font-size: 0.5625rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  transition: color var(--ease);
+  position: relative;
+}
+
+/* Active top indicator line */
+.mobile-nav__link.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 25%; right: 25%;
+  height: 2.5px;
+  background: var(--brand);
+  border-radius: 0 0 3px 3px;
+}
+
+.mobile-nav__link .sidebar__link-icon {
+  width: 22px; height: 22px; opacity: 1; margin: 0; flex-shrink: 0;
+}
+
+.mobile-nav__link.active {
+  color: var(--brand);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────── */
+
+/* Tablet landscape */
 @media (max-width: 1100px) {
   .stats-bar { grid-template-columns: repeat(3, 1fr); }
   .apply-layout { grid-template-columns: 1fr; }
   .apply-info { padding-right: 0; }
 }
 
+/* Tablet portrait — collapse sidebar to icon-only */
 @media (max-width: 900px) {
   :root { --sidebar-w: 64px; }
-  .sidebar__logo-name,
   .sidebar__tagline,
   .sidebar__nav-section,
   .sidebar__link span:last-child,
@@ -729,22 +774,74 @@ input, select { font-family: var(--font); }
   .sidebar__org { justify-content: center; }
   .topbar { padding: 0 1.25rem; }
   .page { padding: 1.5rem; }
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* Mobile — hide sidebar, show bottom nav, make table scrollable */
 @media (max-width: 640px) {
   :root { --sidebar-w: 0px; }
+
+  /* Sidebar hidden */
   .sidebar { display: none; }
   .main { margin-left: 0; }
-  .stats-bar { grid-template-columns: 1fr 1fr; }
-  .table-section__controls { width: 100%; }
+
+  /* Topbar always visible at top */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 0 1rem;
+    height: 52px;
+    z-index: 150;
+  }
+  /* Push content below fixed topbar */
+  .main { padding-top: 52px; }
+
+  /* Page padding + bottom nav clearance so content never hides behind nav */
+  .page {
+    padding: 1rem;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+
+  /* Stats bar: 2 cols, smaller text */
+  .stats-bar { grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+  .stat-card { padding: 1rem; }
+  .stat-card__value { font-size: 1.25rem; }
+
+  /* Table horizontal scroll instead of cramped columns */
+  .table-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table { min-width: 620px; }
+  .table td, .table th { padding: 0.75rem 1rem; }
+  .td-purpose { max-width: 100px; }
+
+  /* Controls stack full-width */
+  .table-section__header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .table-section__controls { width: 100%; flex-wrap: nowrap; }
+  .search-wrap { flex: 1; }
   .search-input { width: 100%; }
   .search-input:focus { width: 100%; }
-  .page { padding: 1rem; }
+  .filter-select { flex-shrink: 0; }
+
+  /* Form card full-width */
   .form-card { padding: 1.25rem; }
-  .table td, .table th { padding: 0.75rem 0.875rem; }
-  .td-purpose { max-width: 80px; }
+
+  /* Apply page single column */
+  .apply-layout { grid-template-columns: 1fr; }
+  .apply-info { padding-right: 0; }
+
+  /* Page header smaller */
+  .page-header h1 { font-size: 1.375rem; }
+  .page-header { margin-bottom: 1.25rem; }
+
+  /* Show mobile nav */
+  .mobile-nav { display: flex; }
+
+  /* Pill badge in topbar — hide on very small */
+  .topbar__pill { display: none; }
 }
 
+/* Very small phones */
 @media (max-width: 420px) {
-  .stats-bar { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .stat-card__value { font-size: 1.125rem; }
+  .stat-card { padding: 0.875rem 0.75rem; }
 }
