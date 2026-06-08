@@ -240,10 +240,10 @@ input, select { font-family: var(--font); }
 }
 
 .topbar__left { display: flex; align-items: center; gap: 0.5rem; }
-.topbar__crumb {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.8125rem; color: var(--text-faint); font-weight: 500;
-}
+
+/* Logo in topbar: hidden on desktop (sidebar shows it), visible on mobile */
+.topbar__mobile-logo { display: none; }
+.topbar__crumb { display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--text-faint); font-weight: 500; }
 .topbar__crumb-sep { color: var(--border-dark); }
 .topbar__crumb-current { color: var(--text-mid); font-weight: 600; }
 
@@ -835,7 +835,11 @@ input, select { font-family: var(--font); }
   /* Show mobile nav */
   .mobile-nav { display: flex; }
 
-  /* Pill badge in topbar — hide on very small */
+  /* Show Vitto logo in topbar, hide desktop breadcrumb */
+  .topbar__mobile-logo { display: flex; align-items: center; }
+  .topbar__crumb--desktop { display: none; }
+
+  /* Pill badge in topbar — hide on mobile */
   .topbar__pill { display: none; }
 }
 
