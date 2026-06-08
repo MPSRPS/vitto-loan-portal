@@ -4,8 +4,8 @@ A full-stack loan application portal built for Vitto — an inclusive FinTech co
 Field agents and borrowers submit loan applications; an operations team reviews and
 updates statuses via a real-time dashboard.
 
-**Live URL:** `https://<your-frontend>.vercel.app`  
-**API Base:** `https://<your-backend>.onrender.com`
+**Live URL:** `https://vitto-loan-portal-lemon.vercel.app/dashboard`  
+**API Base:** `https://vitto-loan-portal-api.onrender.com/`
 
 ---
 
@@ -282,28 +282,10 @@ Render will auto-redeploy.
 
 ## What I'd Improve (given more time)
 
-- Add JWT authentication for the operations dashboard
 - Add pagination to the applications table for scale
 - Implement email/SMS notifications on status change using Resend or Twilio
-- Replace the name `LIKE` search with PostgreSQL full-text search (`tsvector`)
-- Add end-to-end tests with Playwright
+- Prevent duplicate pending applications for the same mobile number.
+- Introduce stricter status transition rules and confirmation workflows.
+- Add application detail pages.
+- Implement authentication and role-based access control.
 - Set up a CI/CD pipeline (GitHub Actions → Render + Vercel)
-
----
-
-## Commit Message Suggestions
-
-```
-feat: initial project scaffold (backend + frontend)
-feat: database migration — applications table with UUID PK and indexes
-feat: POST /api/applications with server-side validation
-feat: GET /api/applications with status and search filters
-feat: PATCH /api/applications/:id/status endpoint
-feat: GET /api/summary aggregation endpoint
-feat: apply page with client-side validation and success confirmation
-feat: dashboard page with stats bar, table, search, and inline status update
-feat: language and status badge components
-chore: add render.yaml, vercel.json, .env.example files
-chore: add .gitignore excluding all .env files
-docs: complete README with local setup and deployment steps
-```
