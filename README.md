@@ -275,8 +275,11 @@ Render will auto-redeploy.
 
 ## Known Issues
 
-- **Render cold start:** Render free-tier services spin down after 15 minutes of inactivity. The first request after a cold start may take 30–60 seconds. This is a platform limitation, not a code issue.
 - **Search is server-side:** Search is performed via a `LIKE` query. For very large datasets, full-text search (pg_tsvector) would be more performant. The index on the `name` column mitigates this at current scale.
+- There is absolutely no authentication or authorization. Anyone who finds the API URL can query GET /api/applications and instantly download the Personally Identifiable Information names and mobile numbers of every single applicant.
+- The applications endpoint currently returns all records without pagination, which may impact performance as the dataset grows.
+- The backend does not check if an active application already exists for a mobile number (Duplicate Loans).
+- Application status changes currently overwrite the existing status value. As a result, there is no historical record of who changed a status or when the change occurred.
 
 ---
 
